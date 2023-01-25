@@ -1,11 +1,19 @@
 import Http from '@/api/api'
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+// import fx from 'money'
 
 export const useCourseStore = defineStore('course', () => {
   const course = ref(null)
 
-  const valute = computed(() => {
+  const currencies = computed(() => {
+    if (course.value) {
+      return Object.keys(course.value.Valute)
+    }
+    return null
+  })
+
+  const currenciesList = computed(() => {
     return course.value
       ? course.value.Valute
       : null
@@ -15,5 +23,10 @@ export const useCourseStore = defineStore('course', () => {
     course.value = await Http.get('daily_json.js')
   }
 
-  return { course, valute, getCourse }
+  function convertingAll (from, to) {
+    console.log('converting!')
+    // response for convert array
+  }
+
+  return { course, currencies, currenciesList, getCourse, convertingAll }
 })

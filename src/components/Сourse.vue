@@ -1,6 +1,11 @@
 <template>
   <div v-if="course">
-    <div v-for="currency in valute" :key="currency.ID">
+    <v-select
+      :items="currencies"
+      v-model="active"
+      label="Currency"
+    ></v-select>
+    <div v-for="currency in currenciesList" :key="currency.ID">
       <CurrencyComponent :value="currency"/>
     </div>
   </div>
@@ -11,7 +16,7 @@
 
 <script>
 import { useCourseStore } from '../stores/course'
-import { onMounted } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import CurrencyComponent from './Currency.vue'
 
@@ -23,15 +28,23 @@ export default {
 
   setup () {
     const store = useCourseStore()
-    const { getCourse } = store
+    const { getCourse, convertingAll } = store
     onMounted(getCourse)
 
-    const { course, valute } = storeToRefs(store)
+    const active = ref('RUB')
+
+    watch(active, (currentValue, oldValue) => {
+      convertingAll(oldValue, currentValue)
+    })
+
+    const { course, currencies, currenciesList } = storeToRefs(store)
 
     return {
       getCourse,
+      active,
       course,
-      valute
+      currencies,
+      currenciesList
     }
   }
 }
