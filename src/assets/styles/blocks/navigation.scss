@@ -1,0 +1,9 @@
+.navigation {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  &__link {
+    text-align: center;
+    padding: 1rem;
+  }
+}
